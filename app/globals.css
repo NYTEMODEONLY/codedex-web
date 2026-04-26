@@ -1,26 +1,167 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================================================
+   CodeDex Pro Web — design tokens
+   Trading-card inspired · creature-ball red + electric yellow
+   a nytemode project
+   ============================================================ */
+
+@theme {
+  /* core palette */
+  --color-bg:            #0B0D14;
+  --color-bg-2:          #11131C;
+  --color-surface:       #161823;
+  --color-surface-2:     #1C1F2D;
+  --color-surface-3:     #232739;
+  --color-input:         #181B27;
+  --color-border:        #262A3B;
+  --color-border-strong: #363B52;
+
+  --color-text:          #F1F2F7;
+  --color-text-2:        #A4A7B6;
+  --color-text-muted:    #6E7287;
+  --color-text-disabled: #454962;
+
+  --color-red:           #E63946;
+  --color-red-soft:      #FF6B6B;
+  --color-red-deep:      #B0202E;
+  --color-yellow:        #FFCB05;
+  --color-yellow-soft:   #FFE066;
+  --color-yellow-deep:   #E5A100;
+
+  --color-success:       #34C759;
+  --color-warning:       #FF9F0A;
+  --color-danger:        #FF453A;
+  --color-scan:          #5AC8FA;
+
+  /* energy types — used decoratively */
+  --color-en-fire:       #F45A2A;
+  --color-en-water:      #3798E1;
+  --color-en-grass:      #5FA84A;
+  --color-en-electric:   #FFCB05;
+  --color-en-psychic:    #B563D6;
+  --color-en-fighting:   #C8623A;
+  --color-en-dark:       #4D4D58;
+  --color-en-fairy:      #E89AC0;
+
+  /* fonts (wired by next/font in layout.tsx) */
+  --font-display: var(--font-space-grotesk), "SF Pro Display", system-ui, sans-serif;
+  --font-body:    var(--font-inter-tight),   "SF Pro Text",    system-ui, sans-serif;
+  --font-mono:    var(--font-jetbrains-mono), "SF Mono",       Menlo,    monospace;
+
+  /* radii */
+  --radius-card: 16px;
+  --radius-ctrl: 10px;
+  --radius-pill: 999px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ---------- base ---------- */
+
+* {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* The whole page uses dvh so iOS Safari URL bar collapse doesn't
+   suddenly create a scrollbar mid-session. */
+html, body, #__next {
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* Subtle ambient background gradient */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 800px 400px at 12% -8%, rgba(230, 57, 70, 0.10), transparent 60%),
+    radial-gradient(ellipse 800px 400px at 110% 110%, rgba(255, 203, 5, 0.08), transparent 60%);
+  z-index: 0;
+}
+
+/* keyboard focus rings */
+*:focus-visible {
+  outline: 2px solid var(--color-yellow);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* selection */
+::selection {
+  background: rgba(255, 203, 5, 0.35);
+  color: var(--color-text);
+}
+
+/* hide scrollbar visually but keep scroll capability inside bounded regions */
+.scrollable {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-surface-3) transparent;
+}
+.scrollable::-webkit-scrollbar {
+  width: 8px;
+}
+.scrollable::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollable::-webkit-scrollbar-thumb {
+  background: var(--color-surface-3);
+  border-radius: 4px;
+}
+.scrollable::-webkit-scrollbar-thumb:hover {
+  background: var(--color-border-strong);
+}
+
+/* ---------- camera + reticle keyframes ---------- */
+
+@keyframes scan-sweep {
+  0%   { top: 8%; }
+  50%  { top: 92%; }
+  100% { top: 8%; }
+}
+
+@keyframes reticle-pulse {
+  0%, 100% { opacity: 0.65; }
+  50%      { opacity: 1; }
+}
+
+@keyframes pulse-ring {
+  0%, 100% { box-shadow: 0 0 0 0 currentColor; opacity: 0.85; }
+  50%      { box-shadow: 0 0 0 5px transparent; opacity: 1; }
+}
+
+@keyframes flash-fire {
+  0%   { opacity: 0.65; }
+  100% { opacity: 0; }
+}
+
+@keyframes toast-in {
+  from { transform: translateY(8px); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes modal-in {
+  from { transform: translateY(12px) scale(0.96); opacity: 0; }
+  to   { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes shade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes row-flash {
+  0%   { background: rgba(52, 199, 89, 0.30); }
+  100% { background: transparent; }
 }
