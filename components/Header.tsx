@@ -1,8 +1,12 @@
 "use client";
 
 import { useApp } from "@/lib/state";
+import { useTally } from "@/lib/useTally";
 import { Pokeball } from "@/components/Pokeball";
 import { EnergyStrip } from "@/components/EnergyStrip";
+
+const compactNumber = new Intl.NumberFormat("en-US", { notation: "compact" });
+const fullNumber = new Intl.NumberFormat("en-US");
 
 function InfoIcon({ className }: { className?: string }) {
   return (
@@ -49,7 +53,9 @@ function GearIcon({ className }: { className?: string }) {
 
 export function Header() {
   const { state, openModal } = useApp();
+  const { total: globalTotal, error: globalError } = useTally();
   const count = state.codes.length;
+  const globalReady = globalTotal !== null && !globalError;
 
   const badgeText =
     count === 0
@@ -90,6 +96,49 @@ export function Header() {
       <EnergyStrip />
 
       <div className="flex-1" />
+
+      {/* Global tally — live counter from Upstash. Hidden on the smallest
+          mobile screens to avoid header crowding. */}
+      <a
+        href="#"
+        onClick={(e) => {
+          e.preventDefault();
+          openModal("about");
+        }}
+        title={
+          globalReady
+            ? `${fullNumber.format(globalTotal)} codes scanned globally with CodeDex Pro`
+            : "Loading global scan count…"
+        }
+        className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-scan/10 text-scan border border-scan/35 font-mono text-[11px] font-bold tracking-[0.08em] uppercase no-underline hover:bg-scan/15 hover:border-scan/55 transition-colors"
+        aria-label={
+          globalReady
+            ? `${fullNumber.format(globalTotal)} codes scanned globally`
+            : "Global scan count loading"
+        }
+      >
+        <span
+          aria-hidden
+          className="block rounded-full bg-scan [animation:pulse-ring_1.6s_ease-in-out_infinite]"
+          style={{
+            width: 6,
+            height: 6,
+            boxShadow: "0 0 6px rgba(90, 200, 250, 0.8)",
+          }}
+        />
+        {globalReady ? (
+          <>
+            <span className="hidden lg:inline">
+              {fullNumber.format(globalTotal)} SCANNED
+            </span>
+            <span className="lg:hidden">
+              {compactNumber.format(globalTotal)}
+            </span>
+          </>
+        ) : (
+          <span className="opacity-60">— SCANNED</span>
+        )}
+      </a>
 
       {/* Yellow count badge */}
       <div

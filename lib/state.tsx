@@ -24,6 +24,7 @@ import {
   saveCodes,
   saveSettings,
 } from "./storage";
+import { bumpTally } from "./useTally";
 
 const MAX_UNDO = 20;
 
@@ -169,6 +170,9 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
         type: "ADD_CODE",
         code: { value: v, source, capturedAt: Date.now() },
       });
+      // Fire-and-forget global counter increment. Failures are silent —
+      // the counter is best-effort and undercount is acceptable.
+      bumpTally();
       const verb = source === "scan" ? "Captured" : "Added";
       showToast(verb, { code: v });
       return true;
