@@ -82,19 +82,6 @@ export function AboutModal() {
             ))}
           </ul>
 
-          <p className="mt-4 text-text-2 text-[13px] leading-relaxed">
-            Learn more or grab the latest release at{" "}
-            <a
-              href="https://nytemode.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-yellow hover:underline"
-            >
-              nytemode.com
-            </a>
-            .
-          </p>
-
           {/* Credits panel */}
           <div className="bg-surface-2 border border-border rounded-xl px-4 py-3.5 flex gap-3 items-start mt-4">
             <MoonIcon className="text-yellow shrink-0 mt-0.5" />
@@ -116,14 +103,6 @@ export function AboutModal() {
       </ModalBody>
 
       <ModalFooter>
-        <a
-          href="https://nytemode.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="bg-transparent text-text-2 border border-border hover:bg-surface-2 hover:text-text rounded-lg px-4 h-10 inline-flex items-center font-body font-semibold text-[13px] transition-colors"
-        >
-          Visit nytemode.com
-        </a>
         <button
           type="button"
           onClick={closeModal}
