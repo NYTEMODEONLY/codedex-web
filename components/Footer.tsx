@@ -47,15 +47,6 @@ export function Footer() {
       >
         About
       </button>
-      <span aria-hidden className="hidden md:inline">·</span>
-      <a
-        href="https://nytemode.com"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="hidden md:inline text-text-2 hover:text-yellow cursor-pointer transition-colors"
-      >
-        Docs
-      </a>
       <span aria-hidden>·</span>
       <MoonIcon className="text-yellow" />
       <span className="flex items-center gap-1">
